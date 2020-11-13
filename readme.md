@@ -91,12 +91,30 @@ try {
 
 >Node还提供一些全局函数。
 
-* setTimeout()：用于在指定毫秒之后，运行回调函数。实际的调用间隔，还取决于系统因素。间隔的毫秒数在1毫秒到2,147,483,647毫秒（约24.8天）之间。如果超过这个范围，会被自动改为1毫秒。该方法返回一个整数，代表这个新建定时器的编号。  
+* setTimeout()：用于在指定毫秒之后，运行回调函数。实际的调用间隔，还取决于系统因素。间隔的毫秒数在1毫秒到2,147,483,647毫秒（约24.8天）之间。如果超过这个范围，会被自动改为1毫秒。**该方法返回一个对象，而不像在浏览器中返回一个整数**。  
+```javascript
+Timeout {
+  _idleTimeout: 1000,
+  _idlePrev: [TimersList],
+  _idleNext: [TimersList],
+  _idleStart: 28,
+  _onTimeout: [Function],
+  _timerArgs: undefined,
+  _repeat: null,
+  _destroyed: false,
+  [Symbol(refed)]: true,
+  [Symbol(asyncId)]: 2,
+  [Symbol(triggerId)]: 1
+}
+
+```
 * clearTimeout()：用于终止一个setTimeout方法新建的定时器。  
 * setInterval()：用于每隔一定毫秒调用回调函数。由于系统因素，可能无法保证每次调用之间正好间隔指定的毫秒数，但只会多于这个间隔，而不会少于它。指定的毫秒数必须是1到2,147,483,647（大约24.8天）之间的整数，如果超过这个范围，会被自动改为1毫秒。该方法返回一个整数，代表这个新建定时器的编号。  
 * clearInterval()：终止一个用setInterval方法新建的定时器。  
+* setImmediate(): 类似于setTimeout()  
 * require()：用于加载模块。  
-* Buffer()：用于操作二进制数据。
+* Buffer()：用于操作二进制数据。  
+* process
 >Node提供两个全局变量，都以两个下划线开头。
 
 * __filename：指向当前运行的脚本文件名。  
