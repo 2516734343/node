@@ -80,7 +80,7 @@ try {
 }
 ```
 
-### 1.6 全局对象和全局变量
+# 2. 全局对象和全局变量
 >Node提供以下几个全局对象，它们是所有模块都可以调用的。
 
 * global：表示Node所在的全局环境，类似于浏览器的window对象。需要注意的是，如果在浏览器中声明一个全局变量，实际上是声明了一个全局对象的属性，比如var x = 1等同于设置window.x = 1，但是Node不是这样，至少在模块中不是这样（REPL环境的行为与浏览器一致）。在模块文件中，声明var x = 1，该变量不是global对象的属性，global.x等于undefined。这是因为模块的全局变量都是该模块私有的，其他模块无法取到。  
@@ -121,3 +121,9 @@ Timeout {
 * __dirname：指向当前运行的脚本所在的目录。  
 >除此之外，还有一些对象实际上是模块内部的局部变量，指向的对象根据模块不同而不同，但是所有模块都适用，可以看作是伪全局变量，主要为module, module.exports, exports等。
 
+# 3.node模块化
+>node模块中的this指向exports
+```javascript
+console.log(this === exports); // true
+  console.log(this === module.exports); // true
+```
