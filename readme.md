@@ -122,8 +122,65 @@ Timeout {
 >除此之外，还有一些对象实际上是模块内部的局部变量，指向的对象根据模块不同而不同，但是所有模块都适用，可以看作是伪全局变量，主要为module, module.exports, exports等。
 
 # 3.node模块化
+### 模块的查找
+* 绝对路径： 根据绝对路径直接加载模块
+```javascript
+const result1 = require('/Users/xxx/Desktop/my-node/node/node的模块化/myModule'); 
+```
+* 相对路径： ./ 或 ../ 相对于当前模块 转化为绝对路径 加载模块
+```javascript
+const result = require('../myModule'); // 2、相对路径
+```
+* 相对路径  
+检查是否是内置模块，如fs，会优先输出内置模块。  
+检查当前目录中的node_modules  
+检查上级目录中的node_modules  
+转换为绝对路径  
+加载模块
+```javascript
+const result2 = require('fs');//相对路径，检查是否是内置模块
+```
+* 关于后缀名  
+如果不提供后缀名，自动补全 js、json、node、mjs  
+* 关于文件名
+> 如果只提供目录，不提供文件名，则自动寻找改目录下的index.js  
+>有时候，一个模块本身就是一个目录，目录中包含多个文件。这时候，Node在package.json文件中，寻找main属性所指明的模块入口文件。  
+>main字段表示包的默认入口，导入或执行包时若仅提供目录，则使用main补全入口，默认值为index.js
+### module对象
+> 记录当前模块的信息
+```javascript
+Module {
+  id: '.',
+  path: '/Users/xxx/Desktop/my-node/node/node的模块化',
+  exports: { c: 3, a: 1, b: 2, m: 5 },
+  parent: null,
+  filename: '/Users/xxx/Desktop/my-node/node/node的模块化/myModule.js',
+  loaded: false,
+  children: [],
+  paths: [
+    '/Users/xxx/Desktop/my-node/node/node的模块化/node_modules',
+    '/Users/xxx/Desktop/my-node/node/node_modules',
+    '/Users/xxx/Desktop/my-node/node_modules',
+    '/Users/xxx/Desktop/node_modules',
+    '/Users/xxx/node_modules',
+    '/Users/node_modules',
+    '/node_modules'
+  ]
+}
+
+```
+
 >node模块中的this指向exports
 ```javascript
 console.log(this === exports); // true
   console.log(this === module.exports); // true
 ```
+### require函数
+当执行一个模块或使用require时，会将模块放置在一个函数环境中
+# node内置模块
+### 1. os
+### 2. path
+### 3. url
+### 4. util
+# 文件I/O
+> Sync函数是同步的，会导致JS运行阻塞，极其影响性能，通常，在程序启动时运行有限的次数即可。
