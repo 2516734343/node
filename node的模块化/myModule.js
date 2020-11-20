@@ -14,3 +14,4 @@ this.m = 5;
 // console.log(module.exports);
 console.log(this === exports);
 console.log(this === module.exports);
+console.log(module);
