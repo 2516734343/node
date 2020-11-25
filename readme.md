@@ -179,8 +179,92 @@ console.log(this === exports); // true
 当执行一个模块或使用require时，会将模块放置在一个函数环境中
 # node内置模块
 ### 1. os
+```javascript
+const os = require('os');
+console.log(os.homedir()); // 当前用户的主目录
+console.log(os.tmpdir()); // 默认的临时文件路径
+console.log(os.cpus()); //每个逻辑的cpu信息
+console.log(os.arch()); // 操作系统的cpu架构
+console.log(os.freemem()); // 返回空闲的系统内存量,以字节为单位
+console.log(os.hostname()); // 返回操作系统的主机名
+
+```
 ### 2. path
+```javascript
+const path = require('path');
+console.log(path.basename('/Users/jingmeimei/Desktop/my-node/node/node的模块化/myModule.js'));// 返回 path 的最后一部分
+console.log('/my-node/node/node的模块化/myModule.js'.split(path.sep));// 提供平台特定的路径片段分隔符
+console.log(process.env.PATH);
+console.log(process.env.PATH.split(path.delimiter)); // 提供平台特定的路径定界符
+console.log(path.dirname('my-node/node/node的模块化/myModule.js')); // 返回path的目录名
+console.log(path.extname('my-node/node/node的模块化/myModule.js'));// 返回path的最后一部分
+console.log(path.join('/a', 'b' , 'node', '..'));// 所有给定的 path 片段连接到一起（使用平台特定的分隔符作为定界符），然后规范化生成的路径。
+console.log(path.normalize('src/node/\\module/..')); // 规范化给定的 path，解析 '..' 和 '.' 片段。
+console.log(path.relative('src/node/a/b', 'src/node/test/c')); // path.relative() 方法根据当前工作目录返回 from 到 to 的相对路径。
+console.log(path.resolve('src','node','./test/a','../b')); // 将路径或路径片段的序列解析为绝对路径。
+```
 ### 3. url
+```javascript
+const myURL = new URL('https://user:pass@sub.host.com:8080/p/a/t/h?query=string#hash');
+console.log(myURL);
+
+URL {
+  href: 'https://user:pass@sub.host.com:8080/p/a/t/h?query=string#hash',
+  origin: 'https://sub.host.com:8080',
+  protocol: 'https:',
+  username: 'user',
+  password: 'pass',
+  host: 'sub.host.com:8080',
+  hostname: 'sub.host.com',
+  port: '8080',
+  pathname: '/p/a/t/h',
+  search: '?query=string',
+  searchParams: URLSearchParams { 'query' => 'string' },
+  hash: '#hash'
+}
+
+```
 ### 4. util
+* util.callbackify  
+>将 async 异步函数（或者一个返回值为 Promise 的函数）转换成遵循异常优先的回调风格的函数，例如将 (err, value) => ... 回调作为最后一个参数。 在回调函数中，第一个参数为拒绝的原因（如果 Promise 解决，则为 null），第二个参数则是解决的值。  
+>回调函数是异步执行的，并且有异常堆栈错误追踪。 如果回调函数抛出一个异常，进程会触发一个 'uncaughtException' 异常，如果没有被捕获，进程将会退出。  
+>null 在回调函数中作为一个参数有其特殊的意义，如果回调函数的首个参数为 Promise 拒绝的原因且带有返回值，且值可以转换成布尔值 false，这个值会被封装在 Error 对象里，可以通过属性 reason 获取。
+```javascript
+async function test() {
+        console.log('hello world');
+}
+
+const callbackFunction = util.callbackify(test);
+callbackFunction((err,val) => {
+        if(err) throw err;
+        console.log(val);
+});
+// hello wolrd
+
+function test() {
+        return Promise.reject(null);
+}
+const callbackFunction = util.callbackify(test);
+callbackFunction((err,val) => {
+        console.log(err);
+        console.log(err && err.hasOwnProperty('reason') && err.reason === null);
+});
+
+// 结果
+
+Error [ERR_FALSY_VALUE_REJECTION]: Promise was rejected with falsy value
+    at processTicksAndRejections (internal/process/task_queues.js:84:21) {
+  reason: null,
+  code: 'ERR_FALSY_VALUE_REJECTION'
+}
+true
+
+```
+* util.inherits  
+> util.inherits(constructor, superConstructor)
+* util.isDeepStrictEqual  
+> 是否严格相等。
+* util.promisify  
+> 传入一个遵循常见的错误优先的回调风格的函数（即以 (err, value) => ... 回调作为最后一个参数），并返回一个返回 promise 的版本。
 # 文件I/O
 > Sync函数是同步的，会导致JS运行阻塞，极其影响性能，通常，在程序启动时运行有限的次数即可。
