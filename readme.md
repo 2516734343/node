@@ -279,3 +279,128 @@ true
 > 传入一个遵循常见的错误优先的回调风格的函数（即以 (err, value) => ... 回调作为最后一个参数），并返回一个返回 promise 的版本。
 # 文件I/O
 > Sync函数是同步的，会导致JS运行阻塞，极其影响性能，通常，在程序启动时运行有限的次数即可。
+* fs.readFile
+> path <string>  <Buffer> | <URL> | <integer> 文件名或文件描述符。  
+> options <Object> | <string>  
+>> encoding <string> | <null> 默认值: null。  
+>>flag <string> 参见文件系统 flag 的支持。 默认值: 'r'。  
+返回: <string> | <Buffer> 
+返回 path 的内容。 
+
+```javascript
+const fs = require('fs');
+const path = require('path');
+const fileName = path.resolve(__dirname, './file/1.txt');
+// 异步读取
+fs.readFile(fileName, {encoding: 'utf-8', flag: 'r'}, (err, data) => {
+    if(err) throw err;
+    console.log(data);
+});
+```
+* fs.readFileSync  
+```javascript
+// 同步读取
+const result = fs.readFileSync(fileName, 'utf-8');
+console.log(result);
+```
+* fs.writeFile  
+```javascript
+const fs = require('fs');
+const path = require('path');
+const fileName = path.resolve(__dirname, './file/3.js');
+const data = "console.log('test2')";
+// 如果没有文件，则会创建一个文件
+// 异步
+fs.writeFile(fileName, data, (err) => {
+    if(err) throw err;
+    console.log('文件已经被保存');
+});
+```
+* fs.writeFileSync  
+```javascript
+
+// 同步
+fs.writeFileSync(fileName, data);
+```
+* fs.stat  
+> 返回文件的信息
+```javascript
+const fs = require('fs');
+const path = require('path');
+const fileName = path.resolve(__dirname, './file/1.txt');
+async function test() {
+    const result = await fs.promises.stat(fileName);
+    console.log(result);
+    console.log('是否是目录', result.isDirectory());
+    console.log('是否是文件', result.isFile());
+}
+test();
+
+```
+* fs.mkdir  
+> 创建一个新目录
+```javascript
+const fs = require('fs');
+const path = require('path');
+const dirname = path.resolve(__dirname, './file/test');
+async function test() {
+    await fs.promises.mkdir(dirname);
+    console.log('创建成功');
+}
+test();
+
+```
+* fs.readdir  
+```javascript
+const fs = require('fs');
+const path = require('path');
+const dirname = path.resolve(__dirname, './file');
+async function test() {
+    const result = await fs.promises.readdir(dirname);
+    console.log(result); // 返回目录中文件的名称的数组
+}
+test();
+```
+* fs.exists  
+```javascript
+const fs = require('fs');
+const path = require('path');
+const dirname = path.resolve(__dirname, './file/test2');
+async function exists(filename) {
+    try {
+        await fs.promises.stat(filename);
+        return true;
+    } catch (e) {
+        if (e.code === 'ENOENT') { // 文件不存在
+            return false;
+        }
+        throw e;
+    }
+}
+
+async function test() {
+    const result = await exists(dirname);
+    if (result) {
+        console.log('目录已存在');
+    } else {
+        await fs.promises.mkdir(dirname);
+        console.log('创建成功');
+    }
+}
+
+test();
+
+```s
+* fs.copyFile  
+```javascript
+const fs = require('fs');
+const path = require('path');
+const fileName1 = path.resolve(__dirname, './file/1.txt');
+const fileName2 = path.resolve(__dirname, './file/4.txt');
+// 不存在目标文件的时候会创建一个
+fs.copyFile(fileName1, fileName2,(err) => {
+    if(err) throw err;
+    console.log('复制成功');
+});
+
+```
