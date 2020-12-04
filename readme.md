@@ -188,7 +188,7 @@ console.log(this === exports); // true
 ```
 ### require函数
 当执行一个模块或使用require时，会将模块放置在一个函数环境中
-# node内置模块
+# 4、node内置模块
 ### 1. os
 ```javascript
 const os = require('os');
@@ -277,7 +277,7 @@ true
 > 是否严格相等。
 * util.promisify  
 > 传入一个遵循常见的错误优先的回调风格的函数（即以 (err, value) => ... 回调作为最后一个参数），并返回一个返回 promise 的版本。
-# 文件I/O
+# 5、文件I/O
 > Sync函数是同步的，会导致JS运行阻塞，极其影响性能，通常，在程序启动时运行有限的次数即可。
 * fs.readFile
 > path <string>  <Buffer> | <URL> | <integer> 文件名或文件描述符。  
@@ -404,3 +404,4 @@ fs.copyFile(fileName1, fileName2,(err) => {
 });
 
 ```
+# 6、文件流
